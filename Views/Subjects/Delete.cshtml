@@ -1,0 +1,66 @@
+﻿@model StudentELibrary.Models.Subject
+
+@{
+    ViewBag.Title = "Избриши предмет";
+}
+
+<div class="mx-3 my-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 col-md-6">
+            <h3 class="my-3">Дали сте сигурни дека сакате да го избришете предметот?</h3>
+            <div>
+                <h4>Податоци</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Semester)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Semester)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Year)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Year)
+                    </dd>
+
+
+                    <dt>
+                        @Html.DisplayName("Студиска насока")
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.StudyProgramme.Name)
+                    </dd>
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="btn-group mb-3">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Избриши" class="btn btn-primary shadow-none" />
+                        </div>
+                    </div>
+                }
+            </div>
+            <div>
+                @Html.ActionLink("Назад", "Index")
+            </div>
+        </div>
+    </div>
+</div>
+

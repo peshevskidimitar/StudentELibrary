@@ -1,0 +1,244 @@
+﻿@model StudentELibrary.Models.ResourceSearchModel
+@{
+    ViewBag.Title = "Библиотека";
+}
+
+<div class="container py-3" id="resources">
+    @using (Html.BeginForm("Details", "Libraries", FormMethod.Post, htmlAttributes: new { id = "main-form" }))
+    {
+        @Html.HiddenFor(model => model.PageSize)
+        @Html.HiddenFor(model => model.PageNumber)
+        @Html.HiddenFor(model => model.TotalPages)
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+
+
+                <section>
+
+
+                    <section class="filters">
+                        <div class="accordion accordion-flush mb-3">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                    <button class="accordion-button shadow-none" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                            aria-controls="panelsStayOpen-collapseOne">
+                                        Предмети
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                                     aria-labelledby="panelsStayOpen-headingOne">
+                                    <div class="accordion-body">
+                                        <section>
+                                            <div class="">
+                                                @for (int i = 0; i < Model.SubjectFilters.Count; ++i)
+                                                {
+                                                    <div class="form-check pl-0 mb-1">
+                                                        @Html.CheckBoxFor(model => model.SubjectFilters[i].IsChecked, new { @class = "form-check-input checkbox shadow-none" })
+                                                        @Html.LabelFor(model => model.SubjectFilters[i].IsChecked, Model.SubjectFilters[i].Subject.Name, new { @class = "text-uppercase small" })
+                                                        @Html.HiddenFor(model => model.SubjectFilters[i].Subject.Id)
+                                                        @Html.HiddenFor(model => model.SubjectFilters[i].Subject.Name)
+                                                        @Html.HiddenFor(model => model.SubjectFilters[i].Subject.Semester)
+                                                        @Html.HiddenFor(model => model.SubjectFilters[i].Subject.Year)
+                                                        @Html.HiddenFor(model => model.SubjectFilters[i].Subject.StudyProgramme.Id)
+                                                        @Html.HiddenFor(model => model.SubjectFilters[i].Subject.StudyProgramme.Name)
+                                                    </div>
+                                                }
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                    <button class="accordion-button collapsed shadow-none" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo"
+                                            aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                        Семестри
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                                     aria-labelledby="panelsStayOpen-headingTwo">
+                                    <div class="accordion-body">
+                                        <section>
+                                            <div class="d-flex flex-md-column justify-content-around flex-wrap">
+                                                @for (int i = 0; i < Model.SemesterFilters.Count; ++i)
+                                                {
+                                                    <div class="form-check pl-0 mb-1">
+                                                        @Html.CheckBoxFor(model => model.SemesterFilters[i].IsChecked, new { @class = "form-check-input checkbox shadow-none" })
+                                                        @Html.LabelFor(model => model.SemesterFilters[i].IsChecked, Model.SemesterFilters[i].ToString(), new { @class = "text-uppercase small" })
+                                                        @Html.HiddenFor(model => model.SemesterFilters[i].Semester)
+                                                    </div>
+                                                }
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                    <button class="accordion-button collapsed shadow-none" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree"
+                                            aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                        Години
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                                     aria-labelledby="panelsStayOpen-headingThree">
+                                    <div class="accordion-body">
+                                        <section>
+                                            <div class="d-flex flex-md-column justify-content-around flex-wrap">
+                                                @for (int i = 0; i < Model.YearFilters.Count; ++i)
+                                                {
+                                                    <div class="form-check pl-0 mb-1">
+                                                        @Html.CheckBoxFor(model => model.YearFilters[i].IsChecked, new { @class = "form-check-input checkbox shadow-none" })
+                                                        @Html.LabelFor(model => model.YearFilters[i].IsChecked, Model.YearFilters[i].ToString(), new { @class = "text-uppercase small" })
+                                                        @Html.HiddenFor(model => model.YearFilters[i].Year)
+                                                    </div>
+                                                }
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+                                    <button class="accordion-button collapsed shadow-none" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour"
+                                            aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+                                        Студиски насоки
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse"
+                                     aria-labelledby="panelsStayOpen-headingFour">
+                                    <div class="accordion-body">
+                                        <section>
+                                            <div class="">
+                                                @for (int i = 0; i < Model.StudentProgrammeFilters.Count; ++i)
+                                                {
+                                                    <div class="form-check pl-0 mb-1">
+                                                        @Html.CheckBoxFor(model => model.StudentProgrammeFilters[i].IsChecked, new { @class = "form-check-input checkbox shadow-none" })
+                                                        @Html.LabelFor(model => model.StudentProgrammeFilters[i].IsChecked, Model.StudentProgrammeFilters[i].StudyProgramme.Name, new { @class = "text-uppercase small" })
+                                                        @Html.HiddenFor(model => model.StudentProgrammeFilters[i].StudyProgramme.Id)
+                                                        @Html.HiddenFor(model => model.StudentProgrammeFilters[i].StudyProgramme.Name)
+                                                    </div>
+                                                }
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </section>
+
+
+                </section>
+
+
+            </div>
+
+
+
+            <div class="col-md-8 mb-4">
+
+
+                <section class="mb-3">
+                    <div class="row d-flex justify-content-around align-items-center">
+                        <div class="col-12 col-md-6">
+                            <div class="d-flex justify-content-center">
+                                @Html.DropDownListFor(model => model.SelectedSortByOption, Model.SortByOptions, new { @class = "form-control shadow-none" })
+                                @Html.CheckBoxFor(model => model.Ascending, new { @class = "form-check-input filter-option form-check-input checkbox", style = "display: none;" })
+                                <label class="ms-1 h-100" style="user-select: none; font-family: sans-serif;" for="Ascending"><a class="btn btn-outline-primary">&uarr;</a></label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 mt-3 mt-md-0">
+                            <div class="d-flex justify-content-center">
+                                @Html.TextBoxFor(model => model.SearchString, "", new { @class = "form-control shadow-none", placeholder = "Пребарај ресурси..." })
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+                <section class="h-100">
+                    <div class="row h-100 align-items-md-center d-none" id="loader">
+                        <div class="col text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="partialView"></div>
+                </section>
+
+            </div>
+
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function ajaxCall() {
+            $("#PageNumber").val(1);
+            let serializedForm = $("#main-form").serialize();
+            $.ajax({
+                url: '/Libraries/RenderResources/',
+                type: 'POST',
+                data: serializedForm,
+                beforeSend: function () {
+                    $("#partialView").empty();
+                    $("#loader").removeClass("d-none");
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            }).done(function (result) {
+                setTimeout(function () {
+                    $("#loader").addClass("d-none");
+                    $("#partialView").empty();
+                    $("#partialView").append(result);
+                }, 250)
+            });
+        }
+
+        $(document).ready(() => {
+            $('#main-form').submit(false);
+
+            ajaxCall();
+
+            let checkboxes = document.getElementsByClassName("checkbox");
+            for (let i = 0; i < checkboxes.length; ++i)
+                checkboxes[i].addEventListener('change', function () {
+                    ajaxCall();
+                });
+
+            let searchInput = document.getElementById('SearchString');
+            searchInput.addEventListener('keyup', () => {
+                ajaxCall();
+            });
+            searchInput.addEventListener('change', () => {
+                ajaxCall();
+            });
+
+            $("#SelectedSortByOption").on('change', function () {
+                ajaxCall();
+            });
+
+            let arrow = $("label[for='Ascending'] a");
+            arrow.on('click', function () {
+                let data = {}
+                $("#main-form").serializeArray().map(function (x) { if (data[x.name] == null) { data[x.name] = x.value; } });
+                if (data["Ascending"] == "true")
+                    arrow.html("&darr;");
+                else
+                    arrow.html("&uarr;");
+            });
+        });
+    </script>
+}

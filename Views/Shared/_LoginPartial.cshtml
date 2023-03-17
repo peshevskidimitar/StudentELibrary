@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li>
+                @Html.ActionLink("Добредојде, " + User.Identity.GetUserName() + "! ", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Одјави се</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex d-lg-none d-xl-flex">
+        <li>@Html.ActionLink("Регистрирај се", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+        <li>@Html.ActionLink("Најави се", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+    </ul>
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-none d-lg-flex d-xl-none">
+        <li><a class="mx-3" href="/Account/Register" id="registerLink"><i class="fa-solid fa-user-plus"></i></a></li>
+        <li><a class="mx-3" href="/Account/Login" id="loginLink"><i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
+    </ul>
+}

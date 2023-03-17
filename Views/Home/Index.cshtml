@@ -1,0 +1,141 @@
+﻿@model IEnumerable<StudentELibrary.Models.Resource>
+
+@{
+    ViewBag.Title = "Почетна";
+}
+
+@section Styles {
+    <style>
+        @@media (max-width: 767px) {
+            .carousel-inner .carousel-item > div {
+                display: none;
+            }
+
+                .carousel-inner .carousel-item > div:first-child {
+                    display: block;
+                }
+        }
+
+        .carousel-inner .carousel-item.active,
+        .carousel-inner .carousel-item-next,
+        .carousel-inner .carousel-item-prev {
+            display: flex;
+        }
+
+        /* medium and up screens */
+        @@media (min-width: 768px) {
+            .carousel-inner .carousel-item-end.active,
+            .carousel-inner .carousel-item-next {
+                transform: translateX(100%);
+            }
+
+            .carousel-inner .carousel-item-start.active,
+            .carousel-inner .carousel-item-prev {
+                transform: translateX(-100%);
+            }
+        }
+
+        .carousel-inner .carousel-item-end,
+        .carousel-inner .carousel-item-start {
+            transform: translateX(0%);
+        }
+
+        .image-wrapper {
+            height: 215px;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            left: 0;
+            position: absolute;
+            background-size: cover;
+            background-image: url(@Url.Content("~/Content/Images/home-img.jpg"));
+        }
+    </style>
+}
+
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-lg-3">
+            <figure class="my-3">
+                <blockquote class="blockquote" style="font-size: larger;">
+                    <p class="text-uppercase text-center text-md-start">Образованието е најмоќното оружје со коешто можеш да го промениш светот.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer text-center text-md-start">
+                    Нелсон Мандела
+                </figcaption>
+            </figure>
+        </div>
+        <div class="col-lg-9">
+            <img class="img-fluid" src="~/Content/Images/main-img.jpg" />
+        </div>
+    </div>
+    <div style="height: 215px" class="mb-5">
+        <div class="image-wrapper text-center row align-content-center"><h1 class="text-uppercase text-white">Студентска е-библиотека</h1></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="row align-items-center">
+                    <div class="col d-flex justify-content-start">
+                        <button class="ms-3 p-0 row align-items-center btn btn-outline-primary" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                            <span class="">Previous</span>
+                        </button>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <button class="me-3 p-0 row align-items-center btn btn-outline-primary" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                            <span class="">Next</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="carousel-inner">
+                    @foreach (var item in Model)
+                    {
+                        <div class="carousel-item col-12 col-md-2 col-lg-3 col-xl-4" data-bs-interval="5000">
+                            <div class="row w-100">
+                                <div class="col m-3 w-100">
+                                    <div class="card h-100">
+                                        <img src="@item.ImageURL" class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title small">@item.Title</h5>
+                                            <p class="card-text">
+                                                @Html.ActionLink("Повеќе", "Details", "Resources", new { id = item.Id }, new { @class = "" })
+                                            </p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="btn-group btn-group-sm m-1" role="group">
+                                                @Html.ActionLink("Преземи", "DownloadFile", "Resources", new { fileName = item.FileName, title = string.Concat(item.Title, Path.GetExtension(item.FileName)) }, new { @class = "btn btn-outline-primary shadow-none text-uppercase", style = "font-size: x-small;" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        let items = document.querySelectorAll('.carousel .carousel-item');
+
+        $(items[0]).addClass("active");
+
+        items.forEach((el) => {
+            const minPerSlide = 4;
+            let next = el.nextElementSibling;
+
+            for (var i = 1; i < minPerSlide; i++) {
+                if (!next)
+                    next = items[0];
+
+                let cloneChild = next.cloneNode(true);
+                el.appendChild(cloneChild.children[0]);
+                next = next.nextElementSibling;
+            }
+        });
+    </script>
+}

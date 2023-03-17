@@ -1,0 +1,29 @@
+﻿@model StudentELibrary.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<div class="row d-flex justify-content-center align-items-center my-5" style="color: #2158b0 !important;">
+    <div class="col-12 col-md-4 text-center m-3 m-md-0">
+        <i class="fa-solid fa-user fa-10x"></i>
+    </div>
+    <div class="col-12 col-md-8">
+        <h4>Поставки</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Лозинка:</dt>
+            <dd>
+                [
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Промени", "ChangePassword")
+                }
+                else
+                {
+                    @Html.ActionLink("Постави", "SetPassword")
+                }
+                ]
+            </dd>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<StudentELibrary.Models.Subject>
+
+@{
+    ViewBag.Title = "Предмети";
+}
+
+@section Styles {
+    <style>
+        div.dataTables_wrapper {
+            margin: 0 auto;
+        }
+    </style>
+}
+
+<table class="table table-hover table-responsive display nowrap" id="subjects-table" width="100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Semester)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayName("Студиска насока")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Semester)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudyProgramme.Name)
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        @Html.ActionLink("Промени", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-primary" })
+                        @Html.ActionLink("Избриши", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-primary" })
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<div class="d-grid gap-2 col-12 col-md-6 col-lg-3">
+    @Html.ActionLink("Додади нов предмет", "Create", new { }, new { @class = "btn btn-outline-primary" })
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#subjects-table").DataTable({
+                responsive: true,
+                scrollX: true,
+                "columnDefs": [
+                    { orderable: false, targets: 4 }
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No data available in table",
+                    "info": "Од _START_. предмет до _END_. предмет. Вкупно _TOTAL_ предмети.",
+                    "infoEmpty": "Прикажани се предметите од 0 до 0 од вкупно 0 предмети",
+                    "infoFiltered": "",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Прикажи _MENU_ предмети",
+                    "loadingRecords": "Се вчитува...",
+                    "processing": "",
+                    "search": "",
+                    "zeroRecords": "Не се пронајдени резултати",
+                    "paginate": {
+                        "first": "Прва",
+                        "last": "Последна",
+                        "next": "Следна",
+                        "previous": "Претходна"
+                    },
+                    "aria": {
+                        "sortAscending": ": activate to sort column ascending",
+                        "sortDescending": ": activate to sort column descending"
+                    }
+                }
+            });
+
+            $("input").addClass("shadow-none");
+            $("select").addClass("shadow-none");
+            $(".btn").addClass("shadow-none");
+            $(".page-link").addClass("shadow-none");
+
+            $("#subjects-table_wrapper").addClass("my-5");
+            $("#subjects-table_wrapper").addClass("mx-3");
+
+            $("#subjects-table_paginate").parent().parent().addClass("mt-3");
+            $("#subjects-table_paginate").parent().addClass("mt-md-0");
+            $("#subjects-table_paginate").parent().addClass("mt-3");
+
+            let element = $("div#subjects-table_length.dataTables_length").parent();
+            element.removeClass("col-sm-12");
+            element.addClass("col-sm-6");
+            element.addClass("col-12");
+            element.addClass("my-sm-0");
+            element.addClass("my-2");
+
+            element = $("div#subjects-table_filter.dataTables_filter input");
+            element.attr("placeholder", "Пребарај предмети...");
+            element.addClass("w-100");
+
+            $("div#subjects-table_filter.dataTables_filter label").addClass("w-50");
+
+
+            element = $("div#subjects-table_filter.dataTables_filter").parent();
+            element.removeClass("col-sm-12");
+            element.addClass("col-sm-6");
+            element.addClass("col-12");
+            element.addClass("my-sm-0");
+            element.addClass("my-2");
+        });
+    </script>
+}

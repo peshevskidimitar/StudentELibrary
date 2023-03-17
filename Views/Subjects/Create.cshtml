@@ -1,0 +1,69 @@
+﻿@model StudentELibrary.Models.Subject
+
+@{
+    ViewBag.Title = "Нов предмет";
+}
+
+<div class="mx-3 my-5">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="form-horizontal">
+                    <h4>Нов предмет</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="input-group mb-3">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-text" })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control shadow-none" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="input-group mb-3">
+                        @Html.LabelFor(model => model.Semester, htmlAttributes: new { @class = "input-group-text" })
+                        @Html.EditorFor(model => model.Semester, new { htmlAttributes = new { @class = "form-control shadow-none" } })
+                        @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="input-group mb-3">
+                        @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "input-group-text" })
+                        @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control shadow-none" } })
+                        @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="input-group mb-3">
+                        @Html.LabelFor(model => model.StudyProgrammeId, htmlAttributes: new { @class = "input-group-text" })
+                        @Html.DropDownListFor(model => model.StudyProgrammeId, Model.AllStudyProgrammes, "Изберете студиска насока", new { @class = "form-control shadow-none" })
+                        @Html.ValidationMessageFor(model => model.StudyProgrammeId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="btn-group mb-3">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Додади" class="btn btn-primary shadow-none" />
+                        </div>
+                    </div>
+
+                    <div>
+                        @Html.ActionLink("Назад", "Index")
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        /*$(document).ready(function () {
+            let semesterInput = $("#Semester");
+            semesterInput.val("1");
+            let yearInput = $("#Year");
+            yearInput.val("1");
+        });*/
+    </script>
+}

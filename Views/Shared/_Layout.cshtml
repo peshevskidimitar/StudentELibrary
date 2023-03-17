@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Студентска е-библиотека</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("Styles", false)
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/a0e379122a.js" crossorigin="anonymous"></script>
+
+    <link rel="icon" type="image/x-icon" href="~/Content/Images/book-solid.svg">
+
+    <style>
+        html {
+            overflow: auto;
+        }
+
+        body {
+            font-family: Montserrat !important;
+        }
+
+        html, body {
+            overflow: visible !important;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 5px;
+            background-color: #2d50ba;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #a8d3f6;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #5c7ad1;
+        }
+
+        .nav-link {
+            color: #2158b0 !important;
+        }
+
+        footer {
+            color: #2158b0;
+        }
+
+        ::-moz-selection {
+            color: #8951b5;
+            background: #d4bfdf;
+        }
+
+        ::selection {
+            color: #8951b5;
+            background: #d4bfdf;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    <div id="main-wrapper">
+        <header>
+            <nav class="navbar navbar-expand-xl navbar-light bg-light" style="background-color: #d4e8ff !important; ">
+                <div class="container">
+                    <a class="navbar-brand text-uppercase" href="/" style="font-size: large;"><strong style="color: #2158b0; ">Студентска</strong> <strong style="color: #2158b0; ">е-библиотека</strong></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                @Html.ActionLink("Почетна", "Index", "Home", new { }, htmlAttributes: new { @class = "nav-link active" })
+                            </li>
+                            <li class="nav-item">
+                                @Html.ActionLink("Ресурси", "Index", "Resources", new { }, htmlAttributes: new { @class = "nav-link" })
+                            </li>
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Teacher"))
+                            {
+                                <li class="nav-item">
+                                    @Html.ActionLink("Предмети", "Index", "Subjects", new { }, htmlAttributes: new { @class = "nav-link" })
+                                </li>
+                            }
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    @Html.ActionLink("Библиотека", "Details", "Libraries", new { }, htmlAttributes: new { @class = "nav-link" })
+                                </li>
+                            }
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item">
+                                    @Html.ActionLink("Улоги", "AddToRole", "Account", new { }, htmlAttributes: new { @class = "nav-link" })
+                                </li>
+                            }
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main class="row align-items-center m-0 p-0">
+            <div class="col body-content m-0 p-0">
+                <div class="container p-0">
+                    @RenderBody()
+                </div>
+            </div>
+        </main>
+        <footer class="bg-light py-3 mt-3" style="background-color: #d4e8ff !important; ">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-6 col-md-6 col-lg-3 text-center mb-3 mb-md-0">
+                        <img class="img-fluid w-75" src="~/Content/Images/footer-img.jpg" />
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 d-flex flex-column justify-content-around">
+                        <div class="ms-3">
+                            <h6 class="text-uppercase text-center text-lg-start"><strong style="color: #2158b0; ">Студентска</strong> <strong style="color: #2158b0; ">е-библиотека</strong></h6>
+                            <p class="mb-0 text-center text-lg-start">Нашата цел е да го олесниме пристапот на студентите до материјали за учење во електронска форма во време на с&egrave; поголема дигитализација.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-6 d-none d-lg-flex flex-column justify-content-around">
+                        <ul class="navbar-nav text-center">
+                            <li>@Html.ActionLink("Почетна", "Index", "Home", new { }, htmlAttributes: new { @class = "active" })</li>
+                            <li>@Html.ActionLink("Ресурси", "Index", "Resources", new { }, htmlAttributes: new { @class = "" })</li>
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Teacher"))
+                            {
+                                <li>
+                                    @Html.ActionLink("Предмети", "Index", "Subjects", new { }, htmlAttributes: new { @class = "" })
+                                </li>
+                            }
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li>
+                                    @Html.ActionLink("Библиотека", "Details", "Libraries", new { }, htmlAttributes: new { @class = "" })
+                                </li>
+                            }
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item">
+                                    @Html.ActionLink("Улоги", "AddToRole", "Account", new { }, htmlAttributes: new { @class = "" })
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-8 d-flex flex-column justify-content-around">
+                        <div class="small text-center my-3">Организирајте ги достапните ресурси според вашите потреби.</div>
+                        <div class="d-flex justify-content-around my-3">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <a href="/Libraries/Details" class="text-decoration-none">
+                                    <div>
+                                        <div class="text-center">
+                                            <i class="fa-solid fa-book-open"></i>
+                                        </div>
+                                        <div class="text-center small mx-1 text-uppercase">Библиотека</div>
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/Account/Register" id="registerLink" class="text-decoration-none">
+                                    <div>
+                                        <div class="text-center">
+                                            <i class="fa-solid fa-user-plus"></i>
+                                        </div>
+                                        <div class="text-center small mx-1">Регистрирај се</div>
+                                    </div>
+                                </a>
+                                <a href="/Account/Login" id="loginLink" class="text-decoration-none">
+                                    <div>
+                                        <div class="text-center">
+                                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                        </div>
+                                        <div class="text-center small mx-1">Најави се</div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <p class="copyright m-0">
+                    &copy; Copyright 2022. All rights reserved.
+                    <a class="d-block d-sm-inline" href="https://peshevskidimitar.github.io/">Димитар Пешевски</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

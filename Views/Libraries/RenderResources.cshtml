@@ -1,0 +1,161 @@
+﻿@model StudentELibrary.Models.ResourceSearchModel
+
+@{
+    if (Model.TotalPages > 0)
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 h-100">
+            @foreach (var item in Model.Resources)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="@item.ImageURL" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text small">
+                                @{
+                                    if (item.Description.Length > 150)
+                                    {
+                                        var description = item.Description.Substring(0, 150);
+                                        <span>@description ...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Description</span>
+                                    }
+                                }
+                            </p>
+                            <p class="card-text">
+                                @Html.ActionLink("Повеќе", "Details", "Resources", new { id = item.Id }, new { @class = "" })
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-group btn-group-sm m-1" role="group">
+                                @Html.ActionLink("Преземи", "DownloadFile", "Resources", new { fileName = item.FileName, title = string.Concat(item.Title, Path.GetExtension(item.FileName)) }, new { @class = "btn btn-outline-primary shadow-none text-uppercase", style = "font-size: x-small;" })
+                            </div>
+                            <div class="btn-group btn-group-sm m-1" role="group">
+                                <a class="btn btn-outline-primary shadow-none text-uppercase btn-remove" js-data-id="@item.Id" style="font-size: x-small;">Отстрани</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <nav aria-label="..." class="mt-3">
+            <ul class="pagination justify-content-end">
+                <li class="page-item" id="previous">
+                    <a class="page-link shadow-none" tabindex="-1" aria-disabled="true" href="#resources">Претходна</a>
+                </li>
+                @{
+                    for (int i = 0; i < Model.TotalPages; ++i)
+                    {
+                        if (i + 1 == Model.PageNumber)
+                        {
+                            <li class="page-item page-number active" js-data-page="@(i+1)"><a class="page-link shadow-none" href="#resources">@(i + 1)</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item page-number" js-data-page="@(i+1)"><a class="page-link shadow-none" href="#resources">@(i + 1)</a></li>
+                        }
+                    }
+                }
+                <li class="page-item" id="next-page">
+                    <a class="page-link shadow-none" href="#resources">Следна</a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div>
+            <p class="text-uppercase text-center my-5">Не се пронајдени ресурси.</p>
+        </div>
+    }
+}
+
+<script>
+    function serializeForm() {
+        let data = {}
+        $("#main-form").serializeArray().map(function (x) { if (data[x.name] == null) { data[x.name] = x.value; } });
+        return data;
+    }
+
+    function createAjaxCall(data) {
+        $.ajax({
+            url: '/Libraries/RenderResources/',
+            type: 'POST',
+            data: data,
+            beforeSend: function () {
+                $("#partialView").empty();
+                $("#loader").removeClass("d-none");
+            },
+            error: function (err) {
+                console.log(err);
+            },
+        }).done(function (result) {
+            setTimeout(function () {
+                $("#loader").addClass("d-none");
+                $("#partialView").empty();
+                $("#partialView").append(result);
+            }, 250)
+        })
+    }
+
+    $(document).ready(() => {
+        $(".btn-remove").on('click', function () {
+            $.ajax({
+                url: "/Libraries/RemoveFromLibrary/" + $(this).attr("js-data-id"),
+                method: "GET",
+                success: function () {
+                    let data = serializeForm();
+                    createAjaxCall(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        })
+
+        $("#TotalPages").val("@Model.TotalPages");
+        $("#PageNumber").val("@Model.PageNumber");
+
+        let data = serializeForm();
+
+        let previous = $('#previous');
+        if (data['PageNumber'] === "1")
+            previous.addClass("disabled");
+        else
+            previous.removeClass('disabled');
+
+        previous.on('click', 'a', function () {
+            if (!previous.hasClass('disabled')) {
+                let data = serializeForm();
+                data['PageNumber'] = (parseInt(data['PageNumber']) - 1).toString();
+                $("#PageNumber").val(data['PageNumber']);
+                createAjaxCall(data);
+            }
+        })
+
+        let next = $("#next-page");
+
+        if (parseInt(data['PageNumber']) >= parseInt(data['TotalPages']))
+            next.addClass("disabled");
+        else
+            next.removeClass('disabled');
+
+        next.on('click', 'a', function () {
+            if (!next.hasClass('disabled')) {
+                var data = serializeForm();
+                data['PageNumber'] = (parseInt(data['PageNumber']) + 1).toString();
+                $("#PageNumber").val(data['PageNumber']);
+                createAjaxCall(data);
+            }
+        })
+
+        $(".page-number").on('click', function () {
+            var data = serializeForm();
+            data['PageNumber'] = $(this).attr("js-data-page");;
+            $("#PageNumber").val(data['PageNumber']);
+            createAjaxCall(data);
+        });
+    });
+</script>

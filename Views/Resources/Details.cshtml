@@ -1,0 +1,81 @@
+﻿@model StudentELibrary.Models.Resource
+
+@{
+    ViewBag.Title = "Постоечки ресурс";
+}
+
+<div class="mx-3 my-5">
+    <h4>Податоци</h4>
+    <hr />
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-12 col-lg-5 col-xl-4">
+                <img src="@Model.ImageURL" class="img-fluid w-100 h-100" alt="...">
+            </div>
+            <div class="col-12 col-lg-7 col-xl-8">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase d-1">@Model.Title</h5>
+                    <p class="card-text m-0"><strong>Автор/и</strong>: @Model.Author</p>
+                    <p class="card-text m-0"><strong>Јазик</strong>: @Model.Language</p>
+                    <p class="card-text m-0"><strong>Датум на издавање</strong>: @Model.DatePublished.ToString("dd.MM.yyyy")</p>
+                    <p class="card-text m-0"><strong>Предмет</strong>: @Model.Subject.Name</p>
+                    <div class="card-text m-0"><strong>Опис</strong>: <div class="m-0" style="text-align: justify;">@Model.Description</div></div>
+                    <div class="card-text m-0"><strong>Забелешки</strong>: <div class="m-0">@Model.Notes</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card-footer">
+
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Teacher"))
+                    {
+                        <div class="row m-2">
+                            <div class="col-12 col-md-6 btn-group-sm mb-1 mb-md-0">
+                                @Html.ActionLink("Промени", "Edit", new { id = Model.Id }, new { @class = "btn btn-outline-primary shadow-none w-100 text-uppercase" })
+                            </div>
+                            <div class="col-12 col-md-6 btn-group-sm mt-1 mt-md-0">
+                                <a class="btn btn-outline-primary shadow-none w-100 text-uppercase" id="delete-button" js-item-id="@Model.Id">Избриши</a>
+                            </div>
+                        </div>
+                    }
+                    @if (Request.IsAuthenticated)
+                    {
+                        <div class="row m-2">
+                            <div class="col-12 btn-group-sm">
+                                @Html.ActionLink("Додади во бибилиотека", "AddToLibrary", "Libraries", new { id = Model.Id }, new { @class = "btn btn-outline-primary shadow-none w-100 text-uppercase" })
+                            </div>
+                        </div>
+                    }
+                    <div class="row m-2">
+                        <div class="col-12 btn-group-sm">
+                            @Html.ActionLink("Преземи", "DownloadFile", "Resources", new { fileName = Model.FileName, title = string.Concat(Model.Title, Path.GetExtension(Model.FileName)) }, new { @class = "btn btn-outline-primary w-100 text-uppercase shadow-none" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.ActionLink("Назад", "Index")
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            $("#delete-button").on('click', function () {
+                $.ajax({
+                    url: "/Resources/Delete/" + @Model.Id,
+                    method: "POST",
+                    success: function () {
+                        window.location.href = "/Resources/Index";
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+    </script>
+}
